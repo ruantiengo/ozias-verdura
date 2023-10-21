@@ -3,13 +3,10 @@ import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { cn } from "@/lib/utils";
-import { Inter as FontSans } from "next/font/google";
+import { fontSans } from "@/lib/fonts"
 import { ThemeProvider } from "@/providers/theme-provider";
-
-export const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+import { MainNav } from "@/components/main-nav";
+import { SiteHeader } from "@/components/header";
 
 export const metadata = {
   title: "Create T3 App",
@@ -30,13 +27,15 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-        <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TRPCReactProvider headers={headers()}>
+            <SiteHeader/>
+            {children}</TRPCReactProvider>
         </ThemeProvider>
       </body>
     </html>
