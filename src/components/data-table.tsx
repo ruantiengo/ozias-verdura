@@ -8,7 +8,6 @@
  
 import * as React from "react"
 import {
-  type ColumnDef,
   type ColumnFiltersState,
   type SortingState,
   type VisibilityState,
@@ -39,6 +38,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { AlertDialog } from "./delete-alert"
+import { AddClientDialog } from "@/app/_components/create-client"
 
  
 
@@ -86,9 +86,7 @@ export function DataTable({columns, data}: DataTableProps) {
           }
           className="max-w-sm"
         />
-        <Button variant={"outline"}>
-            Adicionar Cliente
-        </Button>
+        <AddClientDialog/>
         <AlertDialog disabled={true}/>
         <Button variant="outline" size="icon">
             <FileIcon className="h-4 w-4" />
@@ -172,8 +170,8 @@ export function DataTable({columns, data}: DataTableProps) {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredSelectedRowModel().rows.length} de{" "}
+          {table.getFilteredRowModel().rows.length} linha(s) selecionadas.
         </div>
         <div className="space-x-2">
           <Button
@@ -182,7 +180,7 @@ export function DataTable({columns, data}: DataTableProps) {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            Anterior
           </Button>
           <Button
             variant="outline"
@@ -190,7 +188,7 @@ export function DataTable({columns, data}: DataTableProps) {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            Proxima
           </Button>
         </div>
       </div>

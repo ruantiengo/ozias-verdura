@@ -2,19 +2,32 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Customer {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  phone     String
+  email     String
+  createdAt DateTime @default(now())
+  address   Address?
 
-    @@index([name])
+  @@index([name])
+}
+
+model Address {
+  id         Int      @id @default(autoincrement())
+  cep        String
+  street     String
+  number     String
+  district   String
+  city       String
+  customerId Int      @unique
+  customer   Customer @relation(fields: [customerId], references: [id])
 }

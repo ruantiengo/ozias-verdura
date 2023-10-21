@@ -7,6 +7,7 @@ import { fontSans } from "@/lib/fonts"
 import { ThemeProvider } from "@/providers/theme-provider";
 import { MainNav } from "@/components/main-nav";
 import { SiteHeader } from "@/components/header";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata = {
   title: "Create T3 App",
@@ -35,7 +36,9 @@ export default function RootLayout({
         >
           <TRPCReactProvider headers={headers()}>
             <SiteHeader/>
-            {children}</TRPCReactProvider>
+            {children}
+            <Toaster />
+            </TRPCReactProvider>
         </ThemeProvider>
       </body>
     </html>
