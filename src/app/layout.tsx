@@ -1,11 +1,12 @@
 import "@/styles/globals.css";
-
-import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "@/trpc/react";
+import { cn } from "@/lib/utils";
+import { Inter as FontSans } from "next/font/google";
+import { ThemeProvider } from "@/providers/theme-provider";
 
-const inter = Inter({
+export const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -23,8 +24,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable,
+        )}
+      >
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
         <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
