@@ -5,7 +5,6 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 import { fontSans } from "@/lib/fonts"
 import { ThemeProvider } from "@/providers/theme-provider";
-import { MainNav } from "@/components/main-nav";
 import { SiteHeader } from "@/components/header";
 import { Toaster } from "@/components/ui/toaster";
 

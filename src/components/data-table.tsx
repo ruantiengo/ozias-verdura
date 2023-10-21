@@ -45,9 +45,10 @@ import { AddClientDialog } from "@/app/_components/create-client"
 type DataTableProps = {
     columns: any[]
     data: any[]
+    addElement: React.ReactNode
 }
  
-export function DataTable({columns, data}: DataTableProps) {
+export function DataTable({columns, data, addElement}: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -86,8 +87,8 @@ export function DataTable({columns, data}: DataTableProps) {
           }
           className="max-w-sm"
         />
-        <AddClientDialog/>
-        <AlertDialog disabled={true}/>
+        {addElement}
+        <AlertDialog  table={table}/>
         <Button variant="outline" size="icon">
             <FileIcon className="h-4 w-4" />
         </Button>

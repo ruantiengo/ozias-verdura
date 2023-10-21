@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@radix-ui/react-dropdown-menu";
+
 // app/[route]/loading.tsx
 export default function PageLoading() {
   return (

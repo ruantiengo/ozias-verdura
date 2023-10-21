@@ -17,7 +17,7 @@ model Customer {
   email     String
   createdAt DateTime @default(now())
   address   Address?
-
+  enabled   Boolean  @default(true)
   @@index([name])
 }
 
@@ -29,5 +29,5 @@ model Address {
   district   String
   city       String
   customerId Int      @unique
-  customer   Customer @relation(fields: [customerId], references: [id])
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }

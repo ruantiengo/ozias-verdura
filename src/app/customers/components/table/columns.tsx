@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -7,26 +9,26 @@
 "use client";
 import {
   ArrowUpDown,
-  ChevronDown,
-  ExpandIcon,
-  FileIcon,
+  BanIcon,
   MoreHorizontal,
-  OutdentIcon,
+  VerifiedIcon,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { faker } from "@faker-js/faker";
+
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { type ColumnDef } from "@tanstack/react-table";
+import { api } from "@/trpc/react";
+import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
+import { userCustomerStore } from "@/store/customer-store";
 
 export type Customer = {
   id: string;
@@ -86,7 +88,33 @@ export const columns: ColumnDef<Customer>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+   
+      const { toast } = useToast();
+      const [isLoading, setIsLoading] = useState(false)
+      const {removeCustomer} = userCustomerStore()
+     
+      const deleteCustomer = api.customer.delete.useMutation({
+        onSuccess: (res) => {
+          toast({
+            description: <div className="flex gap-2"><VerifiedIcon color="green"/> <span>Cliente deletado com sucesso.</span></div>,
+          })
+          removeCustomer(res.id)
+        },
+        onMutate: () => {
+          toast({
+            description: <div className="flex gap-2"> <span>Carregando...</span></div>,
+          })
+          setIsLoading(true);
+        },
+        onError: (e) => {
+          
+          setIsLoading(false);
+          toast({
+            variant: "destructive",
+            description: <div className="flex gap-2"><BanIcon color="red"/> <span className="w-[300px]">{e.message}</span></div>
+          })
+        },
+      });
 
       return (
         <DropdownMenu>
@@ -99,7 +127,13 @@ export const columns: ColumnDef<Customer>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
             <DropdownMenuItem>Editar</DropdownMenuItem>
-            <DropdownMenuItem>Excluir</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {
+              console.log(row.id);
+              
+              deleteCustomer.mutate({
+                id: Number(row.original.id)
+              })
+            }}>Excluir</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -3,80 +3,28 @@
 "use client"
 import { DataTable } from "@/components/data-table";
 
-import { type Customer, columns } from "./components/table/columns";
-import { faker } from "@faker-js/faker";
+import { columns } from "./components/table/columns";
 import { api } from "@/trpc/react";
 import PageLoading from "./loading";
 import { userCustomerStore } from "@/store/customer-store";
 import { useEffect } from "react";
+import { AddClientDialog } from "../_components/create-client";
 
-const getCustomers = async () => {
-  const data: Customer[] = [
-    {
-      id: faker.string.uuid(),
-      email: faker.internet.email(),
-      name: faker.person.fullName(),
-      phone: faker.phone.number(),
-    },
-    {
-      id: faker.string.uuid(),
-      email: faker.internet.email(),
-      name: faker.person.fullName(),
-      phone: faker.phone.number(),
-    },
-    {
-      id: faker.string.uuid(),
-      email: faker.internet.email(),
-      name: faker.person.fullName(),
-      phone: faker.phone.number(),
-    },
-    {
-      id: faker.string.uuid(),
-      email: faker.internet.email(),
-      name: faker.person.fullName(),
-      phone: faker.phone.number(),
-    },
-    {
-      id: faker.string.uuid(),
-      email: faker.internet.email(),
-      name: faker.person.fullName(),
-      phone: faker.phone.number(),
-    },
-    {
-      id: faker.string.uuid(),
-      email: faker.internet.email(),
-      name: faker.person.fullName(),
-      phone: faker.phone.number(),
-    },
-    {
-      id: faker.string.uuid(),
-      email: faker.internet.email(),
-      name: faker.person.fullName(),
-      phone: faker.phone.number(),
-    },
-    {
-      id: faker.string.uuid(),
-      email: faker.internet.email(),
-      name: faker.person.fullName(),
-      phone: faker.phone.number(),
-    },
-  ];
-
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const customerData = data;
-      resolve(customerData);
-    }, 1000); // Atraso de 1 segundo
-  });
-};
 export default function CustomerPage() {
 
     const {data, isLoading, error} = api.customer.getAll.useQuery();
     const { customers, setCustomers } = userCustomerStore()
-    
+  
     useEffect(() => {
-      setCustomers(data)
-    }, [data])
+      setCustomers(data as {
+        id: number;
+        name: string;
+        phone: string;
+        email: string;
+        createdAt: Date;
+        enabled: boolean;
+    }[] )
+    }, [data, setCustomers])
 
     if(isLoading){
       return (
@@ -92,7 +40,7 @@ export default function CustomerPage() {
     
       return (
         <main>
-          <DataTable columns={columns} data={customers ?? []} />
+          <DataTable columns={columns} data={customers ?? []} addElement={<AddClientDialog/>}/>
         </main>
       );
     }

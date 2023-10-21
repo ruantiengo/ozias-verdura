@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function AddClientDialog() {
-  const { toast } = useToast("")
+  const { toast } = useToast()
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -189,7 +189,7 @@ export function AddClientDialog() {
             />
           </div>
           <DialogFooter>
-            <Button type="submit" className="w-32">
+            <Button type="submit" className="w-32" disabled={isLoading}>
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
