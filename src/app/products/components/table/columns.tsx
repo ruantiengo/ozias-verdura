@@ -29,6 +29,7 @@ import { api } from "@/trpc/react";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { useCustomerStore } from "@/store/customer-store";
+import { useProductStore } from "@/store/product-store";
 
 export type Customer = {
   id: string;
@@ -63,25 +64,25 @@ export const columns: ColumnDef<Customer>[] = [
     cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "email",
+    accessorKey: "sellPrice",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Preço de  Venda
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("sellPrice")}</div>,
   },
   {
-    accessorKey: "phone",
-    header: () => <div className="text-right">Telefone</div>,
+    accessorKey: "buyPrice",
+    header: () => <div className="text-right">Preço de compra</div>,
     cell: ({ row }) => (
-      <div className="text-right font-medium">{row.getValue("phone")}</div>
+      <div className="text-right font-medium">{row.getValue("buyPrice")}</div>
     ),
   },
   {
@@ -91,14 +92,14 @@ export const columns: ColumnDef<Customer>[] = [
    
       const { toast } = useToast();
       const [isLoading, setIsLoading] = useState(false)
-      const {removeCustomer} = useCustomerStore()
+      const {removeProduct} = useProductStore()
      
-      const deleteCustomer = api.customer.delete.useMutation({
+      const deleteCustomer = api.product.delete.useMutation({
         onSuccess: (res) => {
           toast({
-            description: <div className="flex gap-2"><VerifiedIcon color="green"/> <span>Cliente deletado com sucesso.</span></div>,
+            description: <div className="flex gap-2"><VerifiedIcon color="green"/> <span>Produto deletado com sucesso.</span></div>,
           })
-          removeCustomer(res.id)
+          removeProduct(res.id)
         },
         onMutate: () => {
           toast({

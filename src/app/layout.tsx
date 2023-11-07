@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { TRPCReactProvider } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 import { fontSans } from "@/lib/fonts"
-import { ThemeProvider } from "@/providers/theme-provider";
+import { ThemeProvider } from "@/providers/theme-provider"; 
 import { SiteHeader } from "@/components/header";
 import { Toaster } from "@/components/ui/toaster";
 

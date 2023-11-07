@@ -18,6 +18,7 @@ model Customer {
   createdAt DateTime @default(now())
   address   Address?
   enabled   Boolean  @default(true)
+
   @@index([name])
 }
 
@@ -30,4 +31,15 @@ model Address {
   city       String
   customerId Int      @unique
   customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
+model Product {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  sellPrice Float
+  buyPrice  Float
+  createdAt DateTime @default(now())
+  enabled   Boolean  @default(true)
+
+  @@index([name])
 }

@@ -18,7 +18,7 @@ import { type Table } from "@tanstack/react-table"
 import { BanIcon, VerifiedIcon } from "lucide-react"
 import { useState } from "react"
 import { useToast } from "./ui/use-toast"
-import { userCustomerStore } from "@/store/customer-store"
+import { useCustomerStore } from "@/store/customer-store"
   
   type AlertDialogProps = {
     table: Table<any>
@@ -26,7 +26,7 @@ import { userCustomerStore } from "@/store/customer-store"
   export function AlertDialog({table}: AlertDialogProps) {
     const {toast} = useToast()
     const [isLoading, setIsLoading] = useState(false)
-    const {removeCustomer } = userCustomerStore()
+    const {removeCustomer } = useCustomerStore()
     const deleteCustomer = api.customer.deleteMany.useMutation({
       onSuccess: (res, ids) => {
         toast({
@@ -59,10 +59,9 @@ import { userCustomerStore } from "@/store/customer-store"
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
+              Essa ação não pode ser desfeita, se você clicar em excluir os clientes serão desabilitados.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -6,14 +6,14 @@ import { DataTable } from "@/components/data-table";
 import { columns } from "./components/table/columns";
 import { api } from "@/trpc/react";
 import PageLoading from "./loading";
-import { userCustomerStore } from "@/store/customer-store";
+import { useCustomerStore } from "@/store/customer-store";
 import { useEffect } from "react";
 import { AddClientDialog } from "../_components/create-client";
 
 export default function CustomerPage() {
 
     const {data, isLoading, error} = api.customer.getAll.useQuery();
-    const { customers, setCustomers } = userCustomerStore()
+    const { customers, setCustomers } = useCustomerStore()
   
     useEffect(() => {
       setCustomers(data as {

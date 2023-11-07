@@ -39,6 +39,7 @@ import {
 } from "@/components/ui/table"
 import { AlertDialog } from "./delete-alert"
 import { AddClientDialog } from "@/app/_components/create-client"
+import { useProductStore } from "@/store/product-store"
 
  
 
@@ -46,9 +47,10 @@ type DataTableProps = {
     columns: any[]
     data: any[]
     addElement: React.ReactNode
+    identifier: string
 }
  
-export function DataTable({columns, data, addElement}: DataTableProps) {
+export function DataTable({columns, data, addElement, identifier}: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -56,7 +58,7 @@ export function DataTable({columns, data, addElement}: DataTableProps) {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
- 
+  const {setTable: setTableProduct} = useProductStore()
   const table = useReactTable({
     data,
     columns,
@@ -75,20 +77,29 @@ export function DataTable({columns, data, addElement}: DataTableProps) {
       rowSelection,
     },
   })
- 
+
+
+  React.useEffect(() => {
+    if(identifier == "products") {
+      setTableProduct(table)
+      console.log(table.getAllColumns());
+      
+    }
+  }, [identifier, setTableProduct, table])
+
   return (
     <div className="container items-center space-x-4 sm:justify-between sm:space-x-0">
       <div className="flex items-center py-4 gap-2">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Filtrar nomes..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         {addElement}
-        <AlertDialog  table={table}/>
+       
         <Button variant="outline" size="icon">
             <FileIcon className="h-4 w-4" />
         </Button>

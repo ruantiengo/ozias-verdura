@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { userCustomerStore } from "@/store/customer-store";
+import { useCustomerStore } from "@/store/customer-store";
 import { api } from "@/trpc/react";
 import { BanIcon, Loader2, VerifiedIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -32,7 +32,7 @@ export function AddClientDialog() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
-  const { addCustomer } = userCustomerStore();
+  const { addCustomer } = useCustomerStore();
   const createCustomer = api.customer.create.useMutation({
     onSuccess: (res) => {
       setIsLoading(false);
@@ -53,13 +53,29 @@ export function AddClientDialog() {
     },
     onMutate: () => {
       setIsLoading(true);
-    },
-    onError: () => {
-      setIsLoading(false);
       toast({
-        variant: "destructive",
-        description: <div className="flex gap-2"><BanIcon color="red"/> <span className="w-[300px]">Erro ao criar o cliente, verifique se as informações estão corretas</span></div>
+        description: <div className="flex gap-2"><span className="w-[300px]">Carregando...</span></div>
       })
+    },
+    onError: (e) => {
+      setIsLoading(false);
+      console.log();
+      if(e.message.includes('Unique constraint failed on the fields: (`name`)')){
+        toast({
+          variant: "destructive",
+          description: <div className="flex gap-2"><BanIcon color="red"/> <span className="w-[300px]">Erro. Um cliente que pode ou não estar desabilitado com esse nome já existe, por favor tente usar outro nome.</span></div>
+        })
+      } else if(e.message.includes('"code": "too_small"')) {
+        toast({
+          variant: "destructive",
+          description: <div className="flex gap-2"><BanIcon color="red"/> <span className="w-[300px]">Erro. O Campo nome não pode ser vazio.</span></div>
+        })
+      } else{
+        toast({
+          variant: "destructive",
+          description: <div className="flex gap-2"><BanIcon color="red"/> <span className="w-[300px]">Erro Inesperado, por favor tente mais tarde.</span></div>
+        })
+      }
     },
   });
 
@@ -93,13 +109,14 @@ export function AddClientDialog() {
         >
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Nome
+              Nome*
             </Label>
             <Input
               id="name"
               placeholder="Uberaba"
               className="col-span-3"
               value={name}
+              required
               onChange={(e) => setName(e.target.value)}
             />
           </div>

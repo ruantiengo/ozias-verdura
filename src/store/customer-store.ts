@@ -8,15 +8,11 @@ interface CustomerState {
   setCustomers: (customers: Customer[]) => void
   addCustomer: (customer: Customer) => void
   removeCustomer: (customerId: number) => void
-  customersIdsSelecteds: number[],
-  setCustomerIdsSelecteds: (ids: number[]) => void
 }
 
-export const userCustomerStore = create<CustomerState>((set) => ({
+export const useCustomerStore = create<CustomerState>((set) => ({
   customers: [] as Customer[],
   setCustomers: (customers) => set((_state) => ({ customers })),
   addCustomer: (customer) => set(state => ({customers: [...state.customers, customer]})),
   removeCustomer: (customerId) => set(state => ({customers: state.customers.filter(c => c.id != customerId)})),
-  customersIdsSelecteds: [],
-  setCustomerIdsSelecteds: (ids) => set(() => ({customersIdsSelecteds: ids}))
 }));
