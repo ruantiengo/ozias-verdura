@@ -32,7 +32,7 @@ import { useCustomerStore } from "@/store/customer-store";
 import { InfoClientDialog } from "@/app/_components/client/info-client";
 import { EditClientDialog } from "@/app/_components/client/edit-client";
 import DeleteDialog from "@/app/_components/client/delete-dialog";
-import { CustomerWithAddress } from "@/types/customer";
+import { type CustomerWithAddress } from "@/types/customer";
 
 export type Customer = {
   id: string;

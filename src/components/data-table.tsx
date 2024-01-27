@@ -37,20 +37,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { AlertDialog } from "./delete-alert"
-import { AddClientDialog } from "@/app/_components/client/create-client"
-import { useProductStore } from "@/store/product-store"
-
- 
-
 type DataTableProps = {
     columns: any[]
     data: any[]
     addElement: React.ReactNode
-    identifier: string
 }
  
-export function DataTable({columns, data, addElement, identifier}: DataTableProps) {
+export function DataTable({columns, data, addElement}: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -58,7 +51,7 @@ export function DataTable({columns, data, addElement, identifier}: DataTableProp
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
-  const {setTable: setTableProduct} = useProductStore()
+  
   const table = useReactTable({
     data,
     columns,
@@ -82,7 +75,7 @@ export function DataTable({columns, data, addElement, identifier}: DataTableProp
 
   React.useEffect(() => {
     table.setPageSize(9)
-  }, [])
+  }, [table])
 
   return (
     <div className="container items-center space-x-4 sm:justify-between sm:space-x-0">

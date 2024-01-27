@@ -13,7 +13,7 @@ import { AddProductDialog } from "../_components/create-product";
 
 
 export default function ProductsPage() {
-  const { data, isLoading, error } = api.product.getAll.useQuery();
+  const { data, isLoading } = api.product.getAll.useQuery();
   const { products, setProducts } = useProductStore();
 
   useEffect(() => {
@@ -39,7 +39,6 @@ export default function ProductsPage() {
           columns={columns}
           data={products ?? []}
           addElement={<AddProductDialog />}
-          identifier="products"
         />
       </main>
     );

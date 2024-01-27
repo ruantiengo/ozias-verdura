@@ -11,7 +11,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { useCustomerStore } from "@/store/customer-store";
 import { useProductStore } from "@/store/product-store";
 import { api } from "@/trpc/react";
 import { BanIcon, Loader2, VerifiedIcon } from "lucide-react";
