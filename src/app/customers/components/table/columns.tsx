@@ -29,6 +29,9 @@ import { api } from "@/trpc/react";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { useCustomerStore } from "@/store/customer-store";
+import { InfoClientDialog } from "@/app/_components/client/info-client";
+import { EditClientDialog } from "@/app/_components/client/edit-client";
+import DeleteDialog from "@/app/_components/client/delete-dialog";
 
 export type Customer = {
   id: string;
@@ -90,32 +93,13 @@ export const columns: ColumnDef<Customer>[] = [
     cell: ({ row }) => {
    
       const { toast } = useToast();
-      const [isLoading, setIsLoading] = useState(false)
-      const {removeCustomer} = useCustomerStore()
-     
-      const deleteCustomer = api.customer.delete.useMutation({
-        onSuccess: (res) => {
-          toast({
-            description: <div className="flex gap-2"><VerifiedIcon color="green"/> <span>Cliente deletado com sucesso.</span></div>,
-          })
-          removeCustomer(res.id)
-        },
-        onMutate: () => {
-          toast({
-            description: <div className="flex gap-2"> <span>Carregando...</span></div>,
-          })
-          setIsLoading(true);
-        },
-        onError: (e) => {
-          
-          setIsLoading(false);
-          toast({
-            variant: "destructive",
-            description: <div className="flex gap-2"><BanIcon color="red"/> <span className="w-[300px]">{e.message}</span></div>
-          })
-        },
-      });
+  
 
+      const {findCustomer } = useCustomerStore()
+ 
+      const customer = findCustomer(Number(row.original.id))
+      console.log(customer);
+      
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -126,14 +110,16 @@ export const columns: ColumnDef<Customer>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem>Editar</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {
-              console.log(row.id);
+            <DropdownMenuItem asChild>
               
-              deleteCustomer.mutate({
-                id: Number(row.original.id)
-              })
-            }}>Excluir</DropdownMenuItem>
+              <InfoClientDialog customer={customer}/>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <EditClientDialog customer={customer!}/>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <DeleteDialog customerId={customer!.id!}/>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -38,7 +38,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { AlertDialog } from "./delete-alert"
-import { AddClientDialog } from "@/app/_components/create-client"
+import { AddClientDialog } from "@/app/_components/client/create-client"
 import { useProductStore } from "@/store/product-store"
 
  
@@ -70,6 +70,7 @@ export function DataTable({columns, data, addElement, identifier}: DataTableProp
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    
     state: {
       sorting,
       columnFilters,
@@ -80,12 +81,8 @@ export function DataTable({columns, data, addElement, identifier}: DataTableProp
 
 
   React.useEffect(() => {
-    if(identifier == "products") {
-      setTableProduct(table)
-      console.log(table.getAllColumns());
-      
-    }
-  }, [identifier, setTableProduct, table])
+    table.setPageSize(9)
+  }, [])
 
   return (
     <div className="container items-center space-x-4 sm:justify-between sm:space-x-0">
@@ -173,7 +170,7 @@ export function DataTable({columns, data, addElement, identifier}: DataTableProp
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Lista vazia.
                 </TableCell>
               </TableRow>
             )}

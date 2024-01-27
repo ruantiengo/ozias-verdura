@@ -8,7 +8,8 @@ import { api } from "@/trpc/react";
 import PageLoading from "./loading";
 import { useCustomerStore } from "@/store/customer-store";
 import { useEffect } from "react";
-import { AddClientDialog } from "../_components/create-client";
+import { AddClientDialog } from "../_components/client/create-client";
+import { type CustomerWithAddress } from "@/types/customer";
 
 export default function CustomerPage() {
 
@@ -16,14 +17,7 @@ export default function CustomerPage() {
     const { customers, setCustomers } = useCustomerStore()
   
     useEffect(() => {
-      setCustomers(data as {
-        id: number;
-        name: string;
-        phone: string;
-        email: string;
-        createdAt: Date;
-        enabled: boolean;
-    }[] )
+      return setCustomers(data as CustomerWithAddress[]);
     }, [data, setCustomers])
 
     if(isLoading){
@@ -40,7 +34,7 @@ export default function CustomerPage() {
     
       return (
         <main>
-          <DataTable columns={columns} data={customers ?? []} addElement={<AddClientDialog/>}/>
+          <DataTable columns={columns} data={customers ?? []} addElement={<AddClientDialog/>} identifier="customer"/>
         </main>
       );
     }

@@ -6,12 +6,11 @@ import { DataTable } from "@/components/data-table";
 import { api } from "@/trpc/react";
 import PageLoading from "./loading";
 import { useEffect } from "react";
-import { AddClientDialog } from "../_components/create-client";
+
 import { useProductStore } from "@/store/product-store";
 import { columns } from "./components/table/columns";
 import { AddProductDialog } from "../_components/create-product";
-import { PdfProducts } from "./components/pdf";
-import dynamic from "next/dynamic";
+
 
 export default function ProductsPage() {
   const { data, isLoading, error } = api.product.getAll.useQuery();
@@ -32,16 +31,10 @@ export default function ProductsPage() {
 
   if (isLoading) {
     return <PageLoading />;
-  } else if (error) {
-    return <></>;
-  } else {  
+  }
 
-    const DynamicPdf = dynamic(() =>
-  import('./components/pdf').then((mod) => mod.PdfProducts)
-)
     return (
       <main>
-        <DynamicPdf/>
         <DataTable
           columns={columns}
           data={products ?? []}
@@ -50,5 +43,4 @@ export default function ProductsPage() {
         />
       </main>
     );
-  }
 }

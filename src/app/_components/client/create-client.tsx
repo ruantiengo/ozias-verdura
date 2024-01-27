@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { useCustomerStore } from "@/store/customer-store";
 import { api } from "@/trpc/react";
+import { type CustomerWithAddress } from "@/types/customer";
 import { BanIcon, Loader2, VerifiedIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -37,7 +38,7 @@ export function AddClientDialog() {
     onSuccess: (res) => {
       setIsLoading(false);
       setIsOpen(false);
-      addCustomer(res);
+      addCustomer(res as CustomerWithAddress);
       toast({
         description: <div className="flex gap-2"><VerifiedIcon color="green"/> <span>Cliente criado com sucesso</span></div>
       })
@@ -59,7 +60,7 @@ export function AddClientDialog() {
     },
     onError: (e) => {
       setIsLoading(false);
-      console.log();
+
       if(e.message.includes('Unique constraint failed on the fields: (`name`)')){
         toast({
           variant: "destructive",
