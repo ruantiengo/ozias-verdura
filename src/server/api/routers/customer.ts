@@ -60,12 +60,12 @@ export const customerRouter = createTRPCRouter({
 
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.customer.findMany({
-      orderBy: { createdAt: "asc" },
        where: {
         enabled: true
        }, include: {
         address: true
-       }
+       },
+       orderBy: { name: "asc" },
     },);
   }),
 

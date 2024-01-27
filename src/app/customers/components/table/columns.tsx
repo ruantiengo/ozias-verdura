@@ -32,6 +32,7 @@ import { useCustomerStore } from "@/store/customer-store";
 import { InfoClientDialog } from "@/app/_components/client/info-client";
 import { EditClientDialog } from "@/app/_components/client/edit-client";
 import DeleteDialog from "@/app/_components/client/delete-dialog";
+import { CustomerWithAddress } from "@/types/customer";
 
 export type Customer = {
   id: string;
@@ -40,7 +41,18 @@ export type Customer = {
   phone: string;
 };
 
-export const columns: ColumnDef<Customer>[] = [
+function formatPhoneNumber(number: string): string {
+  // Check if the number has the correct number of digits
+  if (number.length !== 11) {
+      return "";
+  }
+
+  // Format the number in the desired style
+  const formattedNumber = `(${number.slice(0, 2)}) ${number.slice(2, 7)}-${number.slice(7)}`;
+  return formattedNumber;
+}
+
+export const columns: ColumnDef<CustomerWithAddress>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -62,29 +74,43 @@ export const columns: ColumnDef<Customer>[] = [
   },
   {
     accessorKey: "name",
-    header: "Nome",
+    header: ({ column }) => {
+      return (
+        <span
+      
+          className="text-left flex hover:opacity-50 cursor-default"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </span>
+      );
+    },
     cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    enableSorting: true,
   },
   {
     accessorKey: "email",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
+        <span
+      
+          className="text-left flex hover:opacity-50 cursor-default"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Email
           <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </span>
       );
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    enableSorting: true,
   },
   {
     accessorKey: "phone",
-    header: () => <div className="text-right">Telefone</div>,
+    header: () => <div  className="text-left flex hover:opacity-50 cursor-default">Telefone</div>,
     cell: ({ row }) => (
-      <div className="text-right font-medium">{row.getValue("phone")}</div>
+      <div className="text-left font-medium">{formatPhoneNumber(String(row.getValue("phone")))}</div>
     ),
   },
   {
