@@ -27,18 +27,23 @@ import {
 import { type ColumnDef } from "@tanstack/react-table";
 import { api } from "@/trpc/react";
 import { useToast } from "@/components/ui/use-toast";
+
 import { useProductStore } from "@/store/product-store";
 import DeleteDialog from "@/app/_components/client/delete-dialog";
 import { EditProductDialog } from "@/app/_components/product/edit-product";
+import { useSellOrderStore } from "@/store/sell-order-store";
+import { Customer } from "@prisma/client";
 
-export type Product = {
+export type SellOrder = {
   id: string;
-  name: string;
-  email: string;
-  phone: string;
+  customerId: string;
+  customerName: string;
+  totalPrice: string;
+  date: Date;
+
 };
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<SellOrder>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -59,8 +64,9 @@ export const columns: ColumnDef<Product>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "customer",
     header: ({ column }) => {
+
       return (
         <div
           className="flex cursor-pointer"
@@ -71,30 +77,34 @@ export const columns: ColumnDef<Product>[] = [
         </div>
       );
     },
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    cell: ({ row }) => {
+  
+      const  customer = row.getValue("customer");
+
+      return <div className="capitalize">{customer.name}</div>
+      
+    },
   },
   {
-    accessorKey: "buyPrice",
-    header: () => <div className="cursor-pointer">Preço de compra</div>,
+    accessorKey: "date",
+    header: () => <div className="cursor-pointer">Data</div>,
     cell: ({ row }) => {
-      const formatted = new Intl.NumberFormat("pt-BR",{
-        style: "currency",
-        currency: "BRL"
-      }).format(row.getValue("buyPrice"))
+      const formatted = new Intl.DateTimeFormat("pt-BR",{
+      }).format()
       return (
         <div className="font-medium">{formatted}</div>
       )
     },
   },
   {
-    accessorKey: "sellPrice",
+    accessorKey: "totalPrice",
     header: ({ column }) => {
       return (
         <div
           className="flex  cursor-pointer"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Preço de  Venda
+          Valor
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </div>
       );
@@ -103,7 +113,7 @@ export const columns: ColumnDef<Product>[] = [
       const formatted = new Intl.NumberFormat("pt-BR",{
         style: "currency",
         currency: "BRL"
-      }).format(row.getValue("sellPrice"))
+      }).format(row.getValue("totalPrice"))
       return (<div className="uppercase">{formatted}</div>)
     }
   },
@@ -114,15 +124,15 @@ export const columns: ColumnDef<Product>[] = [
    
       const { toast } = useToast();
  
-      const {removeProduct, findProduct} = useProductStore()
-      const product = findProduct(Number(row.original.id))
+      const {removeSellOrder, findSellOrder} = useSellOrderStore()
+      const sellOrder = findSellOrder(Number(row.original.id))
 
-      const deleteProductFromApi = api.product.delete.useMutation({
+      const deleteProductFromApi = api.sellOrder.delete.useMutation({
         onSuccess: (res) => {
           toast({
-            description: <div className="flex gap-2"><VerifiedIcon color="green"/> <span>Produto deletado com sucesso.</span></div>,
+            description: <div className="flex gap-2"><VerifiedIcon color="green"/> <span>Pedido de venda deletado com sucesso.</span></div>,
           })
-          removeProduct(res.id)
+          removeSellOrder(res.id)
         },
         onMutate: () => {
           toast({
@@ -148,8 +158,8 @@ export const columns: ColumnDef<Product>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem asChild><EditProductDialog product={product!}/></DropdownMenuItem>
-            <DropdownMenuItem asChild><DeleteDialog idToBeDeleted={product!.id} removeElementFromApi={deleteProductFromApi} description="Essa ação desabilitará esse produto. Isso vai deixar esse produto inoperavel."/></DropdownMenuItem>
+            <DropdownMenuItem asChild></DropdownMenuItem>
+            <DropdownMenuItem asChild><DeleteDialog idToBeDeleted={sellOrder!.id} removeElementFromApi={deleteProductFromApi} description="Essa ação excluira esse pedido."/></DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

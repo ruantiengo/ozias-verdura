@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import {
     AlertDialog,
@@ -16,33 +20,13 @@ import { useCustomerStore } from '@/store/customer-store';
 import { toast } from '@/components/ui/use-toast';
   
 interface DeleteDialogProps {
-    customerId: number;
+    idToBeDeleted: number;
+    removeElementFromApi: any;
+
+    description: string
 }
-const DeleteDialog = ({ customerId}: DeleteDialogProps) => {
+const DeleteDialog = ({ idToBeDeleted: customerId, removeElementFromApi, description}: DeleteDialogProps) => {
 
-    const {removeCustomer} = useCustomerStore()
-    const deleteCustomer = api.customer.delete.useMutation({
-        onSuccess: (res) => {
-          toast({
-            description: <div className="flex gap-2"><VerifiedIcon color="green"/> <span>Cliente deletado com sucesso.</span></div>,
-          })
-          removeCustomer(res.id)
-        },
-        onMutate: () => {
-          toast({
-            description: <div className="flex gap-2"> <span>Carregando...</span></div>,
-          })
-  
-        },
-        onError: (e) => {
-          
-
-          toast({
-            variant: "destructive",
-            description: <div className="flex gap-2"><BanIcon color="red"/> <span className="w-[300px]">{e.message}</span></div>
-          })
-        },
-      });
   return (
         <AlertDialog>
         <AlertDialogTrigger>
@@ -54,13 +38,13 @@ const DeleteDialog = ({ customerId}: DeleteDialogProps) => {
             <AlertDialogHeader>
             <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
             <AlertDialogDescription>
-                Essa ação desabilitará esse cliente. Isso vai deixar esse cliente inoperavel.
+                {description}
             </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction onClick={() => {
-                   deleteCustomer.mutate({
+                   removeElementFromApi.mutate({
                     id: customerId
                   })
             }}>Sim, excluir</AlertDialogAction>

@@ -34,7 +34,7 @@ export default function CustomerPage() {
     
       return (
         <main>
-          <DataTable columns={columns} data={customers ?? []} addElement={<AddClientDialog/>}/>
+          <DataTable columns={columns} data={customers ?? []} tableProperties={[<AddClientDialog key={"add client"}/>]}/>
         </main>
       );
     }

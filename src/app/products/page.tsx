@@ -38,7 +38,8 @@ export default function ProductsPage() {
         <DataTable
           columns={columns}
           data={products ?? []}
-          addElement={<AddProductDialog />}
+          tableProperties={[
+          <AddProductDialog key={"addproduct"}/>]}
         />
       </main>
     );

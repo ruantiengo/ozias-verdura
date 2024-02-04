@@ -124,8 +124,27 @@ export const columns: ColumnDef<CustomerWithAddress>[] = [
       const {findCustomer } = useCustomerStore()
  
       const customer = findCustomer(Number(row.original.id))
-      console.log(customer);
-      
+      const {removeCustomer} = useCustomerStore()
+      const deleteCustomerFromApi = api.customer.delete.useMutation({
+          onSuccess: (res) => {
+            toast({
+              description: <div className="flex gap-2"><VerifiedIcon color="green"/> <span>Cliente deletado com sucesso.</span></div>,
+            })
+            removeCustomer(res.id)
+          },
+          onMutate: () => {
+            toast({
+              description: <div className="flex gap-2"> <span>Carregando...</span></div>,
+            })
+    
+          },
+          onError: (e) => {
+            toast({
+              variant: "destructive",
+              description: <div className="flex gap-2"><BanIcon color="red"/> <span className="w-[300px]">{e.message}</span></div>
+            })
+          },
+        });
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -144,7 +163,7 @@ export const columns: ColumnDef<CustomerWithAddress>[] = [
               <EditClientDialog customer={customer!}/>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <DeleteDialog customerId={customer!.id!}/>
+              <DeleteDialog idToBeDeleted={customer!.id!} removeElementFromApi={deleteCustomerFromApi} description="Essa ação desabilitará esse cliente. Isso vai deixar esse cliente inoperavel."/>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

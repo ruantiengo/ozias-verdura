@@ -11,14 +11,16 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
+
 model Customer {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  phone     String
-  email     String
-  createdAt DateTime @default(now())
-  address   Address?
-  enabled   Boolean  @default(true)
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  phone      String
+  email      String
+  createdAt  DateTime    @default(now())
+  address    Address?
+  enabled    Boolean     @default(true)
+  sellOrders SellOrder[]
 
   @@index([name])
 }
@@ -35,12 +37,32 @@ model Address {
 }
 
 model Product {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
   sellPrice Float
   buyPrice  Float
-  createdAt DateTime @default(now())
-  enabled   Boolean  @default(true)
+  createdAt DateTime    @default(now())
+  enabled   Boolean     @default(true)
+  OrderItem OrderItem[]
 
   @@index([name])
+}
+
+model SellOrder {
+  id         Int         @id @default(autoincrement())
+  date       DateTime
+  orderItems OrderItem[]
+  totalPrice Float
+  customerId Int
+  customer   Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
+model OrderItem {
+  id             Int       @id @default(autoincrement())
+  sellOrderId    Int       @unique
+  sellOrder      SellOrder @relation(fields: [sellOrderId], references: [id], onDelete: Cascade)
+  productId      Int       @unique
+  product        Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity       Int
+  itemPrice Float
 }

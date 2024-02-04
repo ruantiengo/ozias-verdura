@@ -18,8 +18,8 @@ export const siteConfig = {
       href: "/products",
     },
     {
-      title: "Pedidos",
-      href: "/orders",
+      title: "Pedidos de Venda",
+      href: "/sellOrders",
     },
   ],
   links: {

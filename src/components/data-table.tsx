@@ -40,10 +40,11 @@ import {
 type DataTableProps = {
     columns: any[]
     data: any[]
-    addElement: React.ReactNode
+    tableProperties: React.ReactNode[]
+    dataSellOrder?: React.ReactNode[]
 }
  
-export function DataTable({columns, data, addElement}: DataTableProps) {
+export function DataTable({columns, data, tableProperties, dataSellOrder}: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -79,20 +80,24 @@ export function DataTable({columns, data, addElement}: DataTableProps) {
 
   return (
     <div className="container items-center space-x-4 sm:justify-between sm:space-x-0">
+      {dataSellOrder ?       <div className="flex items-center py-4 gap-2">
+        {...dataSellOrder}
+      </div> : ''}
       <div className="flex items-center py-4 gap-2">
-        <Input
+        {/* <Input
           placeholder="Filtrar nomes..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+          value={table.getColumn("name") ? table.getColumn("name")?.getFilterValue() as string  : ""}
+          onChange={(event) => {
+           if(table.getColumn("name")){
+            return table.getColumn("name")?.setFilterValue(event.target.value)
+           }
+           return ""
           }
+        }
           className="max-w-sm"
-        />
-        {addElement}
+        /> */}
+        {...tableProperties}
        
-        <Button variant="outline" size="icon">
-            <FileIcon className="h-4 w-4" />
-        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

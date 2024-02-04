@@ -70,7 +70,7 @@ import { useCustomerStore } from "@/store/customer-store"
             onClick={() => {
               // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
               const originalIds = table.getFilteredSelectedRowModel().rows.map(r => r.original.id as number)
-              console.log(originalIds);
+
               deleteCustomer.mutate({
                 ids: originalIds
               })

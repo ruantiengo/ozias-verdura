@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type Product } from '@prisma/client'
-import { type Table } from '@tanstack/react-table'
 import { create } from 'zustand'
 
 interface ProductState {
@@ -10,15 +9,17 @@ interface ProductState {
     setProducts: (products: Product[]) => void
     addProduct: (product: Product) => void
     removeProduct: (productId: number) => void
-    table: Table<any>
-    setTable: (table: Table<any>) => void
+    findProduct: (productId: number) => Product | undefined
+    updateProduct: (product: Product) => void
 }
 
-export const useProductStore = create<ProductState>((set) => ({
+export const useProductStore = create<ProductState>((set,_state) => ({
     products: [] as Product[],
     setProducts: (products) => set((_state) => ({ products })),
     addProduct: (product) => set(state => ({ products: [...state.products, product] })),
     removeProduct: (productId) => set(state => ({ products: state.products.filter(c => c.id != productId) })),
-    table: {} as Table<any>,
-    setTable: (table) => set((_state)=> ({table: table}))
+    findProduct: (productId) => _state().products.find(p => p.id === productId),
+    updateProduct: (product) => set(state => {
+        return ({products: [...state.products.filter(c => c.id != product.id), product]})
+      }),
 }));
