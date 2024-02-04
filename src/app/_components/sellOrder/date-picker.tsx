@@ -1,6 +1,6 @@
 "use client"
  
-import * as React from "react"
+import React from "react"
 import { addDays, format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { ptBR } from 'date-fns/locale';
@@ -46,7 +46,7 @@ export function DatePicker({date, description,setDate}: DatePickerProps) {
       >
         <Select
           onValueChange={(value) => {
-            const date = addDays(new Date(), parseInt(value as string))
+            const date = addDays(new Date(), parseInt(value))
             date.setHours(0,0,0,0)
             setDate(date)
           }

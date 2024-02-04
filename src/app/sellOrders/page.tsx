@@ -3,7 +3,6 @@
 "use client";
 import { DataTable } from "@/components/data-table";
 import { api } from "@/trpc/react";
-import PageLoading from "./loading";
 import { useEffect, useState } from "react";
 import { AddProductDialog } from "../_components/create-product";
 import { columns } from "./components/table/columns";
@@ -28,10 +27,10 @@ export default function ProductsPage() {
         description: <div className="flex gap-2"><span className="w-[300px]">Carregando...</span></div>
       })
     }
-  }, [isLoading])
+  }, [isLoading, toast])
   useEffect(() => {
     setSellOrders(
-      data!
+      data
     );
  
   }, [data, setSellOrders]);

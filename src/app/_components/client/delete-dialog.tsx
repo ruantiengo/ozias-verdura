@@ -14,10 +14,6 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
-import { api } from '@/trpc/react';
-import { BanIcon, VerifiedIcon } from 'lucide-react';
-import { useCustomerStore } from '@/store/customer-store';
-import { toast } from '@/components/ui/use-toast';
   
 interface DeleteDialogProps {
     idToBeDeleted: number;

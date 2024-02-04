@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { SellOrder, type Product } from '@prisma/client'
-import { type Table } from '@tanstack/react-table'
+import { type SellOrder } from '@prisma/client'
+
 import { create } from 'zustand'
 
 interface SellOrderState {

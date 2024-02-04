@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
@@ -79,7 +80,7 @@ export const columns: ColumnDef<SellOrder>[] = [
     },
     cell: ({ row }) => {
   
-      const  customer = row.getValue("customer");
+      const  customer = row.getValue("customer") as { name: string};
 
       return <div className="capitalize">{customer.name}</div>
       
